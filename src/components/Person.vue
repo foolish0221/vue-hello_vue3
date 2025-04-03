@@ -1,24 +1,37 @@
 <template>
     <div class="person">
-        <h1>情况1：【ref】定义的【基本类型】的数据</h1>
-        <h2>当前求和为：{{ sum }}</h2>
-        <button @click="changeSum">点我sum+1</button>
+        <h1>情况2:【reactive】定义的【对象类型】的数据</h1>
+        <h2>姓名：{{ person.name }}</h2>
+        <h2>年龄：{{ person.age }}</h2>
+        <button @click="changeName">修改名字</button>
+        <button @click="changeAge">修改名字</button>
+        <button @click="changePerson">修改整个人</button>
     </div>
 
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue';
-let sum = ref(0)
-function changeSum() {
-    sum.value += 1
-}
-const stopWatch= watch(sum, (newValue, oldValue) => {
-    console.log('sum变化了', newValue, oldValue)
-    if(sum.value >= 10){
-        stopWatch()
-    }
+import { reactive, watch } from 'vue';
+let person = reactive({
+    name: '张三',
+    age: 18
 })
+function changeName() {
+    person.name += '~'
+}
+function changeAge() {
+    person.age += 1
+}
+function changePerson() {
+    //person = { name: '李四', age: 20 }
+    Object.assign(person, { name: '李四', age: 20 })
+}
+//默认深监听
+watch(person, (newValue, oldValue) => {
+    console.log('person变化了', newValue, oldValue)
+})
+
+
 
 </script>
 
